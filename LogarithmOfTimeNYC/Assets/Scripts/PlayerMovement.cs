@@ -10,12 +10,13 @@ public class PlayerMovement : MonoBehaviour
     public CharacterController controller;
 
     public float speed = 8f;
-    public float gravity = -9.81f;
+    public float gravity = -15.81f;
     public float jumpHeight = 3f;
 
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
+    public LayerMask launchPadMask;
 
     private bool isGrounded;
 
@@ -25,6 +26,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
+        bool isLaunching = Physics.CheckSphere(groundCheck.position, groundDistance, launchPadMask);
 
         if (isGrounded && velocity.y < 0)
         {
@@ -33,6 +35,11 @@ public class PlayerMovement : MonoBehaviour
         else if (!isGrounded)
         {
             velocity.y += gravity * Time.deltaTime;
+        }
+
+        if (isLaunching)
+        {
+            velocity.y = 48f;
         }
 
         float x = Input.GetAxis("Horizontal");
